@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STUD Designs - Engineered for Presence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Importing Inter (body text) and Oswald (Men's heading) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <!-- Load Font Awesome for social media icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* --- NEW COLOR PALETTE & DUAL-THEME UTILITIES --- */
+        :root {
+            /* Light Mode Defaults */
+            --bg-main: #F5F5F5; /* Creamy White background */
+            --color-main: #2D3A42; /* Deep Charcoal Blue for text & dark sections */
+            --color-secondary: #4A5568; /* Text for less important details */
+            --color-border: #E5E7EB; /* Light border */
+            --bg-accent: #00A896; /* Bold Teal/Cyan Accent */
+            --bg-dark-section: #2D3A42;
+            --color-dark-section-text: #F5F5F5;
+            --color-dark-section-secondary: #A0AEC0;
+            /* Light Mode Secondary Button Text Color (Adjusted for visibility) */
+            --color-secondary-button-text: #4A5568; 
+        }
+
+        .dark {
+            --bg-main: #111827; /* Dark background */
+            --color-main: #E5E7EB; /* Light text */
+            --color-secondary: #A0AEC0; /* Lighter text for details */
+            --color-border: #374151; /* Dark border */
+            --bg-dark-section: #1F2937; /* Slightly lighter dark section background */
+            --color-dark-section-text: #E5E7EB;
+            --color-dark-section-secondary: #A0AEC0;
+            /* Dark Mode Secondary Button Text Color */
+            --color-secondary-button-text: #E5E7EB; 
+        }
+        
+        /* Base Styles: All colors use variables for smooth swapping */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main); 
+            color: var(--color-main); 
+            overflow-x: hidden; 
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Font Override for Men's Section Headings */
+        #men-view h2, #men-view h3 {
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700; 
+            letter-spacing: 0.05em;
+        }
+
+        /* Navbar Logo Styling */
+        .stud-logo {
+            font-family: 'Oswald', sans-serif; /* Use Oswald for brand text */
+            color: var(--color-main);
+            transition: color 0.3s;
+        }
+        .stud-logo:hover {
+            color: var(--bg-accent);
+        }
+        .stud-logo-text {
+            line-height: 0.9; /* Compact line height for stacked look */
+        }
+        
+        /* Dark Section is now theme-aware */
+        .dark-section {
+            background-color: var(--bg-dark-section);
+            color: var(--color-dark-section-text); 
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .dark-section .stud-accent-text {
+            color: var(--bg-accent);
+        }
+        .dark-section h2, .dark-section h3, .dark-section .stud-accent {
+            color: var(--bg-accent);
+        }
+        .dark-section p, .dark-section ul {
+            color: var(--color-dark-section-secondary);
+        }
+
+        /* --- SMOOTH PAGE TRANSITIONS & ROUTING (Optimized) --- */
+        .page-view {
+            /* Reduced to 0.2s for faster perceived loading */
+            transition: opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+            opacity: 0;
+            display: none; 
+            width: 100%;
+            min-height: calc(100vh - 80px); 
+            top: 68px; 
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+            position: relative; 
+            will-change: opacity; /* GPU optimization for fades */
+        }
+        .page-view.active {
+            display: block; 
+            opacity: 1; 
+        }
+
+        /* --- HIGH-PERFORMANCE ANIMATIONS --- */
+
+        /* 1. Hero Text Cinematic Reveal */
+        .hero-title-line {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            will-change: transform, opacity; /* GPU optimization */
+        }
+        .hero-title-line:nth-child(1) { transition-delay: 0.1s; }
+        .hero-title-line:nth-child(2) { transition-delay: 0.3s; }
+        .hero-title-line.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* 2. Button Hover (Fast and smooth) */
+        .social-button {
+            /* 0.2s and cubic-bezier for snappy response */
+            transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            will-change: transform, box-shadow; /* GPU optimization */
+        }
+        .social-button:hover {
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3); 
+        }
+        
+        /* Primary button styling override */
+        .stud-btn-primary {
+            background-color: var(--bg-accent);
+            color: var(--color-main);
+            font-weight: 700;
+            transition: background-color 0.2s, color 0.2s; 
+        }
+        .stud-btn-primary:hover {
+            background-color: #008f80; /* Darker teal for hover */
+            color: var(--color-main);
+        }
+        
+        /* Secondary button styling override */
+        .stud-btn-secondary {
+            border: 2px solid var(--bg-accent);
+            color: var(--bg-accent);
+            transition: background-color 0.2s, color 0.2s; 
+        }
+        .stud-btn-secondary:hover {
+            background-color: var(--bg-accent);
+            color: var(--color-main);
+        }
+
+        /* 3. Color Swatch Interaction */
+        .color-swatch {
+            /* 0.2s and cubic-bezier for snappy response */
+            transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.2s ease-in-out; 
+            cursor: pointer;
+            will-change: transform; /* GPU optimization */
+        }
+        .color-swatch:hover {
+            transform: scale(1.1); 
+        }
+        .color-swatch.selected {
+            box-shadow: 0 0 0 4px var(--bg-main), 0 0 0 6px var(--bg-accent); 
+        }
+        
+        /* Active Navigation Link Indicator (Static) */
+        .nav-link.active {
+            color: var(--bg-accent); 
+            font-weight: 700;
+            border-bottom: 2px solid var(--bg-accent);
+        }
+        
+        /* Light/Dark Mode Toggle Icon */
+        #theme-toggle {
+            transition: color 0.3s;
+        }
+        
+        /* 4. Contact Card Styling */
+        .contact-card {
+            background-color: var(--bg-dark-section); 
+            color: var(--color-dark-section-text);
+            height: 100%; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            /* Using smoother timing for the card itself */
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), background-color 0.3s, box-shadow 0.3s; 
+            will-change: transform, box-shadow; /* GPU optimization */
+        }
+        .contact-card:hover {
+            transform: translateY(-5px); 
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+        }
+        .contact-card .icon-container {
+            color: white;
+            transition: color 0.3s;
+        }
+        .contact-card:hover .icon-container {
+            color: var(--bg-accent);
+        }
+        
+        /* --- SIZE GUIDE SPECIFIC STYLES --- */
+        /* Table Header Background for Light Mode is now softer */
+        .size-table-header {
+            background-color: #E0E7FF; /* Very light blue/indigo to maintain cool tone, much lighter than gray */
+            color: var(--color-main); /* Ensures text is dark and visible */
+            transition: background-color 0.3s;
+        }
+        /* Table Header Background for Dark Mode */
+        .dark .size-table-header {
+            background-color: #1F2937; /* Dark background */
+            color: var(--color-dark-section-text); /* Light text */
+        }
+        
+        /* Table Row Hover (Improved for Light Mode) */
+        .size-table-row:hover {
+            background-color: #E6FFFA; /* Very light, soft teal color (like a soft glow) */
+        }
+        /* Table Row Hover (Dark Mode) */
+        .dark .size-table-row:hover {
+            background-color: #1F2937; /* Darker background */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navigation (Sticky) -->
+    <header class="sticky top-0 z-50 bg-[--bg-main] bg-opacity-95 backdrop-blur-sm shadow-md border-b border-[--color-border]" style="height: 68px;">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex justify-between items-center">
+            
+            <!-- Logo Section: Replaced Video Icon with Custom SVG and Stacked Text -->
+            <a href="#" data-page="home" class="nav-link stud-logo flex items-center">
+                <!-- Custom SVG Logo: Abstract shape matching the 'Engineered' Vibe -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-2 fill-[--bg-accent]" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15H9V7h2v10zm4 0h-2V7h2v10z"/>
+                    <path fill="var(--color-main)" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15H9V7h2v10zm4 0h-2V7h2v10z"/>
+                    <path fill="var(--bg-accent)" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM9 7h2v10H9V7zm4 0h2v10h-2V7z"/>
+                </svg>
+                <div class="stud-logo-text text-[--color-main]">
+                    <span class="block text-xl font-black uppercase">STUD</span>
+                    <span class="block text-xs font-light uppercase tracking-widest -mt-1">Designs</span>
+                </div>
+            </a>
+            <!-- End Logo Section -->
+
+            <nav class="flex items-center space-x-4 sm:space-x-8 text-sm sm:text-base">
+                <a href="#" data-page="home" class="nav-link text-[--color-main] hover:text-[--bg-accent] pb-4">Home</a>
+                <a href="#" data-page="men" class="nav-link text-[--color-main] hover:text-[--bg-accent] pb-4">Men</a>
+                <a href="#" data-page="women" class="nav-link text-[--color-main] hover:text-[--bg-accent] pb-4">Women</a>
+                <a href="#" data-page="size-guide" class="nav-link text-[--color-main] hover:text-[--bg-accent] pb-4">Size Guide</a>
+                <a href="#" data-page="contact" class="nav-link text-[--color-main] hover:text-[--bg-accent] pb-4">Contact</a>
+                
+                <!-- Dark/Light Mode Toggle -->
+                <button id="theme-toggle" class="text-xl p-2 rounded-full hover:bg-[--color-border]">
+                    <i id="theme-icon" class="fas fa-sun text-[--color-main]"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER (Wrapper for all views) -->
+    <main id="main-content" class="relative">
+
+        <!-- ===== 1. HOME VIEW: Brand & Store Details & Trend Drop ===== -->
+        <section id="home-view" class="page-view active pt-0">
+            <!-- Hero: Brand Mission (Dark Section) -->
+            <div class="dark-section h-[85vh] flex flex-col items-center justify-center text-center overflow-hidden border-b border-[--color-border]">
+                <div class="px-4 max-w-5xl">
+                    <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-9xl font-black uppercase leading-none mb-6">
+                        <span class="block stud-accent hero-title-line">Engineered</span>
+                        <span class="block text-white hero-title-line">for Presence.</span>
+                    </h1>
+                    <p class="text-lg sm:text-xl text-[--color-dark-section-secondary] mb-10 font-light hero-title-line" style="transition-delay: 0.5s;">
+                        STUD Designs creates minimalist, high-impact apparel. We focus on one perfect fit and one perfect material. **Essentials redefined.**
+                    </p>
+                    <a href="#" data-page="men" class="nav-link inline-block px-8 py-3 text-base uppercase tracking-wider rounded-lg shadow-xl social-button stud-btn-primary hero-title-line" style="transition-delay: 0.7s;">
+                        View Collections
+                    </a>
+                </div>
+            </div>
+
+            <!-- Trend Drop Section (Non-AI API Usage) -->
+            <div class="py-20 px-4">
+                 <div class="max-w-7xl mx-auto">
+                    <span class="stud-accent font-semibold uppercase tracking-widest text-sm mb-2 block text-center">New Arrivals</span>
+                    <h2 class="text-4xl sm:text-5xl font-extrabold mb-12 text-center leading-tight text-[--color-main]">
+                        Seasonal Trend Drops
+                    </h2>
+                    
+                    <div id="trend-drop-container" class="grid md:grid-cols-3 gap-8">
+                        <!-- Content loaded by fetchTrendDrops() JS function -->
+                        <div class="col-span-full text-center text-[--color-secondary]">Loading latest trends...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Brand Details Section (Dark Section) -->
+            <div class="py-20 md:py-32 px-4 dark-section border-t border-[--color-border]">
+                <div class="max-w-7xl mx-auto">
+                    <span class="stud-accent font-semibold uppercase tracking-widest text-sm mb-2 block text-center">Our Philosophy</span>
+                    <h2 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-12 text-center leading-tight text-white stud-accent-text">
+                        The Core of STUD
+                    </h2>
+
+                    <div class="grid md:grid-cols-3 gap-10 text-center">
+                        <div>
+                            <i class="fas fa-hammer text-4xl stud-accent mb-4"></i>
+                            <h3 class="text-2xl font-bold mb-3 stud-accent">Material Focus</h3>
+                            <p class="text-[--color-dark-section-secondary]">We source only heavy-weight, combed cotton blends, ensuring durability and a premium, structured drape that lasts for years.</p>
+                        </div>
+                        <div >
+                            <i class="fas fa-ruler-combined text-4xl stud-accent mb-4"></i>
+                            <h3 class="text-2xl font-bold mb-3 stud-accent">The Perfect Fit</h3>
+                            <p class="text-[--color-dark-section-secondary]">Our design is centered around one modern oversized fit for men and one fluid, relaxed fit for women. Simplistic sizing, maximum style.</p>
+                        </div>
+                        <div >
+                            <i class="fas fa-recycle text-4xl stud-accent mb-4"></i>
+                            <h3 class="text-2xl font-bold mb-3 stud-accent">Zero Waste</h3>
+                            <p class="text-[--color-dark-section-secondary]">We produce limited runs and operate exclusively through direct contact, minimizing overstock and maintaining exclusivity.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== 2. MEN VIEW: ESSENTIAL TEE DETAILS (Harmonized Theme) ===== -->
+        <section id="men-view" class="page-view py-20 md:py-32 px-4">
+            <div class="max-w-7xl mx-auto">
+                <span class="stud-accent font-semibold uppercase tracking-widest text-sm mb-2 block">Men's Essential Tee</span>
+                <h2 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-12 leading-tight">
+                    The Essential Tee
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-10 sm:gap-16 items-start">
+                    
+                    <!-- Feature Text Column -->
+                    <div class="md:sticky md:top-28">
+                        <div>
+                            <h3 class="text-3xl sm:text-4xl font-extrabold mb-6">
+                                The Engineered <span class="stud-accent">Drape</span>.
+                            </h3>
+                            <!-- Text color uses --color-secondary, which swaps based on theme -->
+                            <p class="text-[--color-secondary] text-base sm:text-lg mb-8">
+                                The Essential Tee is the foundation of the STUD brand. It utilizes a **280 GSM combed cotton** for a structured, oversized fit. This garment is built not just to be worn, but to command presence. The minimal logo is embroidered, reflecting a focus on subtle, lasting quality.
+                            </p>
+                            
+                            <!-- Color Selector (Interactive Element for Men) -->
+                            <div class="mb-8">
+                                <p class="text-[--color-main] font-semibold mb-3">Color: <span id="men-selected-color-name" class="font-normal stud-accent">Black</span></p>
+                                <div class="flex space-x-4" id="men-color-swatches-container">
+                                    <div class="color-swatch w-10 h-10 bg-black rounded-full selected" data-color="Black" data-hex="2D3A42" data-img-modifier="BLACK"></div>
+                                    <div class="color-swatch w-10 h-10 bg-white rounded-full" data-color="White" data-hex="F5F5F5" data-img-modifier="WHITE"></div>
+                                    <div class="color-swatch w-10 h-10 bg-gray-700 rounded-full" data-color="Navy" data-hex="1A2C39" data-img-modifier="NAVY"></div>
+                                </div>
+                            </div>
+                            <!-- End Color Selector -->
+
+                            <!-- Text color uses --color-secondary, which swaps based on theme -->
+                            <ul class="space-y-3 text-[--color-secondary] text-base mb-12">
+                                <li><i class="fas fa-tshirt stud-accent mr-2"></i> Heavyweight 280 GSM Cotton</li>
+                                <li><i class="fas fa-cut stud-accent mr-2"></i> Custom Oversized Drop-Shoulder Fit</li>
+                                <li><i class="fas fa-tag stud-accent mr-2"></i> Minimal Embroidered Logo Detail</li>
+                            </ul>
+
+                            <a href="#" data-page="size-guide" class="nav-link stud-accent font-semibold hover:text-[--color-main]">
+                                View Size Measurements <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                        
+                        <!-- CTA Block -->
+                        <div class="mt-10">
+                             <a href="#" data-page="contact" class="nav-link inline-block px-8 py-3 text-base uppercase tracking-wider rounded-lg shadow-xl social-button stud-btn-primary">
+                                Enquire Now
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Image Gallery Column -->
+                    <div class="space-y-10 sm:space-y-12">
+                        <!-- Image 1: Side Profile -->
+                        <div>
+                            <img id="men-img-1" class="image-gallery-item w-full h-auto rounded-xl shadow-xl border border-[--color-border]"
+                                 src="images/men-fit-black.jpg"
+                                 alt="Side profile fit of the STUD Designs Essential t-shirt in Black">
+                        </div>
+                        
+                        <!-- Image 2: Close-up Detail -->
+                        <div>
+                            <img id="men-img-2" class="image-gallery-item w-full h-auto rounded-xl shadow-xl border border-[--color-border]"
+                                 src="images/men-fabric-black.jpg"
+                                 alt="Close-up of the minimal logo embroidery on Black tee">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== 3. WOMEN VIEW: SIGNATURE CREW DETAILS (Harmonized Theme) ===== -->
+        <section id="women-view" class="page-view py-20 md:py-32 px-4">
+            <div class="max-w-7xl mx-auto">
+                <span class="stud-accent font-semibold uppercase tracking-widest text-sm mb-2 block">Women's Signature Crew</span>
+                <h2 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-12 leading-tight">
+                    The Signature Crew
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-10 sm:gap-16 items-start">
+                    
+                    <!-- Feature Text Column -->
+                    <div class="md:sticky md:top-28">
+                        <div>
+                            <h3 class="text-3xl sm:text-4xl font-extrabold mb-6">
+                                Fluidity in <span class="stud-accent">Motion</span>.
+                            </h3>
+                            <!-- Text color uses --color-secondary, which swaps based on theme -->
+                            <p class="text-[--color-secondary] text-base sm:text-lg mb-8">
+                                The Signature Crew is the female counterpart to the Essential Tee, crafted from a lighter, draped **200 GSM cotton jersey** engineered for a relaxed, flowing fit. It features a refined scoop neck and a subtle cropped length, designed for effortless layering and movement.
+                            </p>
+                            
+                            <!-- Color Selector (Interactive Element for Women) -->
+                            <div class="mb-8">
+                                <p class="text-[--color-main] font-semibold mb-3">Color: <span id="women-selected-color-name" class="font-normal stud-accent">Black</span></p>
+                                <div class="flex space-x-4" id="women-color-swatches-container">
+                                    <div class="color-swatch w-10 h-10 bg-black rounded-full selected" data-color="Black" data-hex="000000" data-img-modifier="BLACK"></div>
+                                    <div class="color-swatch w-10 h-10 bg-white rounded-full" data-color="White" data-hex="ffffff" data-img-modifier="WHITE"></div>
+                                    <div class="color-swatch w-10 h-10 bg-gray-500 rounded-full" data-color="Heather Grey" data-hex="808080" data-img-modifier="GREY"></div>
+                                </div>
+                            </div>
+                            <!-- End Color Selector -->
+
+                            <!-- Text color uses --color-secondary, which swaps based on theme -->
+                            <ul class="space-y-3 text-[--color-secondary] text-base mb-12">
+                                <li><i class="fas fa-tshirt stud-accent mr-2"></i> Lightweight 200 GSM Cotton Jersey</li>
+                                <li><i class="fas fa-cut stud-accent mr-2"></i> Relaxed, Drapey Fit</li>
+                                <li><i class="fas fa-tag stud-accent mr-2"></i> Subtle Cropped Length</li>
+                            </ul>
+
+                            <a href="#" data-page="size-guide" class="nav-link stud-accent font-semibold hover:text-[--color-main]">
+                                View Size Measurements <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                        
+                        <!-- CTA Block -->
+                        <div class="mt-10">
+                            <a href="#" data-page="contact" class="nav-link inline-block px-8 py-3 text-base uppercase tracking-wider rounded-lg shadow-xl social-button stud-btn-primary">
+                                Enquire Now
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Image Gallery Column -->
+                    <div class="space-y-10 sm:space-y-12">
+                        <!-- The IDs are crucial for the color swap JS -->
+                        <div>
+                            <img id="women-img-1" class="image-gallery-item w-full h-auto rounded-xl shadow-xl border border-[--color-border]"
+                                 src="images/women-fit-black.jpg"
+                                 alt="Side profile fit of the black Signature Crew">
+                        </div>
+                        
+                        <div>
+                            <img id="women-img-2" class="image-gallery-item w-full h-auto rounded-xl shadow-xl border border-[--color-border]"
+                                 src="images/women-fabric-black.png"
+                                 alt="Close-up of the black Signature Crew fabric texture">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== 4. SIZE GUIDE VIEW: Interactive Measurements Table (Harmonized Theme) ===== -->
+        <section id="size-guide-view" class="page-view py-20 md:py-32 px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <span class="stud-accent font-semibold uppercase tracking-widest text-sm mb-2 block">Measurements</span>
+                <h2 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-12 leading-tight">
+                    Find Your <span class="stud-accent">Perfect Fit</span>
+                </h2>
+                
+                <!-- Measurement Image -->
+                <div class="mb-8 w-full max-w-sm mx-auto">
+                    <img id="size-guide-image" class="w-full h-auto rounded-lg shadow-lg border border-[--color-border]"
+                         src="images/men sixe diagram.png"
+                         alt="Diagram showing how to measure chest, length, and sleeve for men's shirt.">
+                </div>
+                
+                <!-- Gender Toggle -->
+                <div class="flex justify-center space-x-4 mb-8">
+                    <button id="toggle-men" class="px-6 py-3 rounded-lg text-lg font-semibold stud-btn-primary">
+                        Men's Sizing
+                    </button>
+                    <!-- UPDATED: Removed hardcoded classes to use theme-aware variables defined in JS -->
+                    <button id="toggle-women" class="px-6 py-3 rounded-lg text-lg font-semibold bg-gray-200 text-gray-700 hover:bg-gray-300">
+                        Women's Sizing
+                    </button>
+                </div>
+
+                <!-- Size Table -->
+                <div id="size-table-container" class="overflow-x-auto shadow-2xl rounded-xl border border-[--color-border]">
+                    <!-- Table will be dynamically populated by JS -->
+                </div>
+                
+                <p class="text-[--color-secondary] text-sm mt-8">
+                    *All measurements are in inches. For the best fit, compare these to a garment you already own.
+                </p>
+                <div class="mt-12">
+                     <a href="#" data-page="contact" class="nav-link inline-block px-8 py-3 text-base uppercase tracking-wider rounded-lg shadow-xl social-button stud-btn-primary">
+                        Need Help With Sizing?
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== 5. CONTACT VIEW: Social Links (Dark Section) ===== -->
+        <section id="contact-view" class="page-view py-20 md:py-32 px-4 dark-section border-t border-b border-[--color-border]">
+            <div class="max-w-7xl mx-auto text-center">
+                
+                <h2 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 text-white stud-accent-text">
+                    Connect With Us Directly
+                </h2>
+                <p class="text-[--color-dark-section-secondary] text-base sm:text-xl mb-12">
+                    Our team is ready to assist you with sizing, stock availability, and placing your exclusive order. Choose your preferred channel below.
+                </p>
+
+                <!-- Interactive Contact Cards Grid -->
+                <!-- UPDATED GRID: Changed to grid-cols-2 (mobile) and grid-cols-3 (desktop) to handle 6 cards neatly -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-16 max-w-5xl mx-auto">
+                    
+                    <!-- Card 1: WhatsApp -->
+                    <a href="https://wa.me/94760307308" target="_blank" class="contact-card p-6 rounded-xl border border-gray-700 shadow-xl bg-green-700/50 hover:bg-green-700">
+                        <div class="icon-container text-5xl text-white mb-4">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-1 stud-accent">WhatsApp Order Line</h3>
+                        <p class="text-[--color-dark-section-secondary] text-sm">Fastest Response: **+94 760307308**</p>
+                    </a>
+                    
+                    <!-- Card 2: Instagram -->
+                    <a href="https://instagram.com/studdesigns_official" target="_blank" class="contact-card p-6 rounded-xl border border-gray-700 shadow-xl bg-pink-700/50 hover:bg-pink-700">
+                        <div class="icon-container text-5xl text-white mb-4">
+                            <i class="fab fa-instagram"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-1 stud-accent">Instagram DM</h3>
+                        <p class="text-[--color-dark-section-secondary] text-sm">Message our official account: **@STUDDesigns_Official**</p>
+                    </a>
+
+                    <!-- Card 3: Facebook -->
+                    <a href="https://www.facebook.com/share/16g4NvEaer/" target="_blank" class="contact-card p-6 rounded-xl border border-gray-700 shadow-xl bg-blue-700/50 hover:bg-blue-700">
+                        <div class="icon-container text-5xl text-white mb-4">
+                            <i class="fab fa-facebook-f"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-1 stud-accent">Facebook Page</h3>
+                        <p class="text-[--color-dark-section-secondary] text-sm">Follow for updates & chat support.</p>
+                    </a>
+
+                    <!-- New Card 4: CALL US -->
+                    <a href="tel:+94760307308" class="contact-card p-6 rounded-xl border border-gray-700 shadow-xl bg-red-700/50 hover:bg-red-700">
+                        <div class="icon-container text-5xl text-white mb-4">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-1 stud-accent">Call Our Line</h3>
+                        <p class="text-[--color-dark-section-secondary] text-sm">Direct assistance: **+94 760307308**</p>
+                    </a>
+
+                    <!-- Card 5: Mail -->
+                    <a href="mailto:designsstud@gmail.com" class="contact-card p-6 rounded-xl border border-gray-700 shadow-xl bg-gray-600/50 hover:bg-gray-600">
+                        <div class="icon-container text-5xl text-white mb-4">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-1 stud-accent">Mail Address</h3>
+                        <p class="text-[--color-dark-section-secondary] text-sm">For business inquiries: **designsstud@gmail.com**</p>
+                    </a>
+
+                    <!-- Card 6: LinkedIn -->
+                    <a href="https://linkedin.com/company/studdesigns" target="_blank" class="contact-card p-6 rounded-xl border border-gray-700 shadow-xl bg-blue-900/50 hover:bg-blue-900">
+                        <div class="icon-container text-5xl text-white mb-4">
+                            <i class="fab fa-linkedin-in"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-1 stud-accent">LinkedIn</h3>
+                        <p class="text-[--color-dark-section-secondary] text-sm">For brand partnerships & careers.</p>
+                    </a>
+                </div>
+
+                <!-- Secondary/Direct Info -->
+                <div class="mt-16 text-[--color-dark-section-secondary]">
+                    <h3 class="text-2xl sm:text-3xl font-bold mb-4 text-white stud-accent-text">Corporate Office</h3>
+                    <p class="text-lg">STUD Designs Co., Ltd.</p>
+                    <p class="text-lg">555 Fashion Avenue, Suite 101, Global City.</p>
+                </div>
+                
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-10 border-t border-[--color-border] bg-[--bg-main]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:-8 text-center text-[--color-secondary] text-sm">
+            <p>&copy; 2024 STUD Designs. All Rights Reserved. | Designed for Presence</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- JAVASCRIPT FOR ROUTING, INTERACTIVITY, AND THEME (Optimized for Speed) ---
+
+        const pageViews = document.querySelectorAll('.page-view');
+        const navLinks = document.querySelectorAll('.nav-link');
+        let currentPage = 'home'; // Initial page state
+
+        // Size Guide Data (Inches)
+        const sizeData = {
+            men: {
+                S: { chest: "40", length: "28", sleeve: "10" },
+                M: { chest: "42", length: "29", sleeve: "10.5" },
+                L: { chest: "44", length: "30", sleeve: "11" },
+                XL: { chest: "46", length: "31", sleeve: "11.5" }
+            },
+            women: {
+                S: { bust: "34", length: "22", sleeve: "7" },
+                M: { bust: "36", length: "23", sleeve: "7.5" },
+                L: { bust: "38", length: "24", sleeve: "8" },
+                XL: { bust: "40", length: "25", sleeve: "8.5" }
+            }
+        };
+        
+        // --- THEME TOGGLE LOGIC ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+
+        // Check for stored theme preference or default to light
+        let currentTheme = localStorage.getItem('theme') || 'light';
+        document.body.classList.add(currentTheme);
+
+        if (currentTheme === 'dark') {
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+        } else {
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (document.body.classList.contains('dark')) {
+                document.body.classList.remove('dark');
+                currentTheme = 'light';
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                document.body.classList.add('dark');
+                currentTheme = 'dark';
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+            localStorage.setItem('theme', currentTheme);
+        });
+
+        // --- MOCK API TREND DROP LOGIC (Non-AI API Usage) ---
+        const trendDropContainer = document.getElementById('trend-drop-container');
+
+        async function fetchTrendDrops() {
+            // This is a simulated API call to demonstrate a fast, non-AI API function
+            // In a real application, this would fetch data from a backend/CMS.
+            
+            const mockTrendData = [
+                {
+                    title: "The Oversized Renaissance",
+                    description: "Structured, dropped-shoulder fits remain the foundation. Pair with wide-leg trousers for balance.",
+                    icon: "fas fa-ruler-horizontal",
+                    color: "stud-primary"
+                },
+                {
+                    title: "Minimalist Utility",
+                    description: "Functional accessories and tonal layering (charcoal, navy) elevate essential garments from casual to premium.",
+                    icon: "fas fa-layer-group",
+                    color: "gray-500"
+                },
+                {
+                    title: "Textural Contrast",
+                    description: "Contrast the smooth, heavy cotton with rough textures like linen shorts or suede boots. Look is tactile and rich.",
+                    icon: "fas fa-dice-d6",
+                    color: "stud-primary"
+                }
+            ];
+
+            // Simulate network latency (200ms for fast experience)
+            await new Promise(resolve => setTimeout(resolve, 200));
+
+            let html = mockTrendData.map(item => `
+                <div class="bg-[--bg-main] p-6 rounded-xl border border-[--color-border] shadow-lg hover:shadow-xl transition duration-300">
+                    <i class="${item.icon} text-3xl text-[--bg-accent] mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2 text-[--color-main]">${item.title}</h3>
+                    <p class="text-[--color-secondary]">${item.description}</p>
+                </div>
+            `).join('');
+
+            trendDropContainer.innerHTML = html;
+        }
+
+
+        // --- PAGE ROUTING FUNCTION (Instant Routing + Fast Visual Fade) ---
+        function showPage(pageId) {
+            if (pageId === currentPage) return;
+            
+            // 1. Hide current page immediately (opacity fade out handled by CSS)
+            document.getElementById(`${currentPage}-view`).classList.remove('active');
+            currentPage = pageId;
+
+            // 2. Update Navigation Links
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.page === pageId) {
+                    link.classList.add('active');
+                }
+            });
+
+            // 3. Show new page (display: block, opacity: 1 fade in handled by CSS)
+            const nextPage = document.getElementById(`${pageId}-view`);
+            if (nextPage) {
+                // Must ensure page is displayed before adding 'active' to trigger fade-in
+                nextPage.style.display = 'block'; 
+                setTimeout(() => {
+                    nextPage.classList.add('active');
+                    window.scrollTo({ top: 0, behavior: 'instant' }); 
+                }, 10); // Minimal delay to ensure display:block is applied before transition starts
+            }
+            
+            // 4. Clean up previous page display property after transition finishes
+            pageViews.forEach(view => {
+                 if (view.id !== `${pageId}-view` && view.classList.contains('active') === false) {
+                    setTimeout(() => { view.style.display = 'none'; }, 200); // MATCHED new 0.2s CSS transition time
+                }
+            });
+
+            // 5. Specific action for Home page reveal
+            const heroLines = document.querySelectorAll('.hero-title-line');
+            if (pageId === 'home') {
+                heroLines.forEach(el => el.classList.add('revealed'));
+                fetchTrendDrops(); // Load trends when home page is shown
+            } else {
+                // Remove reveal class when leaving home page
+                heroLines.forEach(el => el.classList.remove('revealed'));
+            }
+            
+            // 6. Specific action for Size Guide page
+            if (pageId === 'size-guide') {
+                renderSizeTable('men');
+            }
+        }
+        
+        // --- Navigation Link Listeners ---
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetPage = link.dataset.page || 'home'; 
+                showPage(targetPage);
+            });
+        });
+
+        // --- IMAGE DATA FOR COLOR SWAPPING (New structure for fit AND fabric) ---
+        const productData = {
+            men: {
+                // Filename structure: images/men-[fit/fabric]-[color].png
+                Black: { fit: 'men-fit-black.jpg', fabric: 'men-fabric-black.jpg' },
+                White: { fit: 'men-fit-white.jpg', fabric: 'men-fabric-white.jpg' },
+                Navy: { fit: 'men-fit-navy.jpg', fabric: 'men-fabric-navy.png' }
+            },
+            women: {
+                // Filename structure: images/women-[fit/fabric]-[color].png
+                Black: { fit: 'women-fit-black.jpg', fabric: 'women-fabric-black.png' },
+                White: { fit: 'women-fit-white.png', fabric: 'women-fabric-white.jpg' },
+                'Heather Grey': { fit: 'women-fit-grey.jpg', fabric: 'women-fabric-grey.jpg' }
+            }
+        };
+
+        // --- INTERACTIVE COLOR SWATCH LOGIC (Women View - Instant Swap) ---
+        const womenColorSwatchesContainer = document.getElementById('women-color-swatches-container');
+        const womenSelectedColorName = document.getElementById('women-selected-color-name');
+        
+        if (womenColorSwatchesContainer) {
+            womenColorSwatchesContainer.addEventListener('click', (e) => {
+                const swatch = e.target.closest('.color-swatch');
+                if (!swatch) return;
+
+                document.querySelectorAll('#women-color-swatches-container .color-swatch').forEach(s => s.classList.remove('selected'));
+                swatch.classList.add('selected');
+
+                const colorName = swatch.dataset.color;
+                const data = productData.women[colorName];
+
+                if (data) {
+                    womenSelectedColorName.textContent = colorName;
+
+                    const imgFit = document.getElementById('women-img-1');
+                    const imgFabric = document.getElementById('women-img-2');
+
+                    // ** NEW PATHS **
+                    imgFit.src = `images/${data.fit}`;
+                    imgFabric.src = `images/${data.fabric}`;
+
+                    imgFit.alt = `Side profile fit of the ${colorName} Signature Crew`;
+                    imgFabric.alt = `Close-up of the ${colorName} Signature Crew fabric texture`;
+                }
+            });
+        }
+
+        // --- INTERACTIVE COLOR SWATCH LOGIC (Men View - Instant Swap) ---
+        const menColorSwatchesContainer = document.getElementById('men-color-swatches-container');
+        const menSelectedColorName = document.getElementById('men-selected-color-name');
+        
+        if (menColorSwatchesContainer) {
+            menColorSwatchesContainer.addEventListener('click', (e) => {
+                const swatch = e.target.closest('.color-swatch');
+                if (!swatch) return;
+
+                document.querySelectorAll('#men-color-swatches-container .color-swatch').forEach(s => s.classList.remove('selected'));
+                swatch.classList.add('selected');
+
+                const colorName = swatch.dataset.color;
+                const data = productData.men[colorName];
+
+                if (data) {
+                    menSelectedColorName.textContent = colorName;
+
+                    const imgFit = document.getElementById('men-img-1');
+                    const imgFabric = document.getElementById('men-img-2');
+
+                    // ** NEW PATHS **
+                    imgFit.src = `images/${data.fit}`;
+                    imgFabric.src = `images/${data.fabric}`;
+
+                    imgFit.alt = `Side profile fit of the ${colorName} Essential t-shirt`;
+                    imgFabric.alt = `Close-up of the ${colorName} Essential t-shirt fabric texture`;
+                }
+            });
+        }
+        
+        // --- SIZE GUIDE LOGIC ---
+        const sizeTableContainer = document.getElementById('size-table-container');
+        const toggleMen = document.getElementById('toggle-men');
+        const toggleWomen = document.getElementById('toggle-women');
+        const sizeGuideImage = document.getElementById('size-guide-image'); // New Image element
+        
+        // Utility function to get the primary button class
+        const getPrimaryButtonClasses = () => 'stud-btn-primary';
+        
+        // Use theme-aware classes for unselected button text and background
+        const getSecondaryButtonClasses = () => 'bg-[--color-border] text-[--color-secondary-button-text] hover:bg-gray-200 dark:bg-gray-700 dark:text-[--color-secondary] dark:hover:bg-gray-600';
+
+        // Placeholder image data for the size diagrams
+        const sizeDiagrams = {
+            // ** NEW PATHS **
+            men: {
+                src: "images/men sixe diagram.png",
+                alt: "Diagram showing how to measure chest, length, and sleeve for men's shirt."
+            },
+            women: {
+                src: "images/women-sizing-diagram.png",
+                alt: "Diagram showing how to measure bust, length, and sleeve for women's top."
+            }
+        };
+
+
+        function renderSizeTable(gender) {
+            const data = sizeData[gender];
+            
+            // 1. Update the image diagram
+            sizeGuideImage.src = sizeDiagrams[gender].src;
+            sizeGuideImage.alt = sizeDiagrams[gender].alt;
+
+            // 2. Determine table headers based on gender
+            let headers = ['Size'];
+            if (gender === 'men') {
+                headers = [...headers, 'Chest (in)', 'Length (in)', 'Sleeve (in)'];
+            } else {
+                headers = [...headers, 'Bust (in)', 'Length (in)', 'Sleeve (in)'];
+            }
+
+            // 3. Build HTML Table
+            let tableHTML = `
+                <table class="min-w-full divide-y divide-[--color-border]">
+                    <thead class="size-table-header">
+                        <tr>
+                            ${headers.map(h => `<th class="px-6 py-3 text-left text-xs font-medium text-[--color-main] uppercase tracking-wider">${h}</th>`).join('')}
+                        </tr>
+                    </thead>
+                    <tbody class="bg-[--bg-main] divide-y divide-[--color-border]">
+            `;
+
+            for (const size in data) {
+                const rowData = data[size];
+                tableHTML += `
+                    <tr class="size-table-row">
+                        <td class="px-6 py-4 whitespace-nowrap text-lg font-bold text-[--color-main]">${size}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-[--color-secondary]">${rowData[Object.keys(rowData)[0]]}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-[--color-secondary]">${rowData[Object.keys(rowData)[1]]}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-[--color-secondary]">${rowData[Object.keys(rowData)[2]]}</td>
+                    </tr>
+                `;
+            }
+
+            tableHTML += `</tbody></table>`;
+            sizeTableContainer.innerHTML = tableHTML;
+            
+            // 4. Update toggle button styling
+            if (gender === 'men') {
+                toggleMen.className = `px-6 py-3 rounded-lg text-lg font-semibold ${getPrimaryButtonClasses()}`;
+                toggleWomen.className = `px-6 py-3 rounded-lg text-lg font-semibold ${getSecondaryButtonClasses()}`;
+            } else {
+                toggleWomen.className = `px-6 py-3 rounded-lg text-lg font-semibold ${getPrimaryButtonClasses()}`;
+                toggleMen.className = `px-6 py-3 rounded-lg text-lg font-semibold ${getSecondaryButtonClasses()}`;
+            }
+        }
+
+        toggleMen.addEventListener('click', () => renderSizeTable('men'));
+        toggleWomen.addEventListener('click', () => renderSizeTable('women'));
+
+        // --- Initial Load ---
+        window.addEventListener('load', () => {
+            showPage('home'); // Initialize to the home page
+            // Trigger hero reveal immediately on initial load
+            document.querySelectorAll('.hero-title-line').forEach(el => el.classList.add('revealed'));
+            fetchTrendDrops();
+        });
+
+    </script>
+</body>
+</html>
